@@ -12,9 +12,5 @@ public class CharacterInfo : MonoBehaviour {
     [SerializeField]
     private Faction faction;
 
-    private Faction Faction {
-        get {
-            return faction;
-        }
-    }
+    public Faction Faction { get {return faction;} }
 }

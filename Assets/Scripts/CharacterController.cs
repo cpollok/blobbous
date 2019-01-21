@@ -2,19 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterController : MonoBehaviour {
+public class CharacterController : GameRuleInteractor<GameRules> {
 
-    public GameObject weapon;
-    [SerializeField] private bool stagger = false;
+    [SerializeField] private Animator animator;
+    [SerializeField] private Transform mountingPoints;
 
-    private float staggerTime = 1.5f;
-    private float staggerStart = -1;
-
+    [SerializeField] private GameObject weapon;
     private Weapon weaponController;
+
+    [SerializeField] private float staggerTime = 1.5f;
+    private float staggerStart = -1;
+    private bool stagger = false;
+
     private bool weaponSwung = false;
     private float lastTimeSwung = -1;
-    
-	void Start () {
+
+    private bool dead = false;
+
+    void Start () {
+        gameRules.SetPlayerCharacter(this.gameObject);
         weaponController = weapon.GetComponent<Weapon>();
 	}
 	
@@ -49,7 +55,7 @@ public class CharacterController : MonoBehaviour {
     }
 
     public void Move(float x, float z) {
-        if (stagger || weaponSwung) {
+        if (stagger || weaponSwung || dead) {
             return;
         }
         Turn(x, z);
@@ -69,9 +75,45 @@ public class CharacterController : MonoBehaviour {
         }
     }
 
+    public void Mount(GameObject mountee) {
+        Debug.Log("Mounting!");
+        EnemyInfo enemyInfo = mountee.GetComponent<EnemyInfo>();
+        if (enemyInfo) {
+            Debug.Log("Mounting enemy!");
+            switch (enemyInfo.Type) {
+                case EnemyType.Green:
+                    break;
+                case EnemyType.Blue:
+                    Debug.Log("Mounting blue blob!");
+                    Transform biterMount = mountingPoints.Find("Biter");
+                    mountee.transform.parent = biterMount;
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    public void Die() {
+        dead = true;
+        animator.SetTrigger("BiterHit");
+        LeaveWeapons();
+    }
+
+    private void LeaveWeapons() {
+        Transform weaponsTF = mountingPoints.Find("Weapons");
+        Weapon[] weapons = weaponsTF.GetComponentsInChildren<Weapon>();
+        foreach (Weapon w in weapons) {
+            //w.transform.parent = null;
+            Destroy(w.gameObject);
+        }
+    }
+
     private void OnCollisionEnter(Collision collision) {
-        Debug.Log("Collision Player!");
-        // Bump
-        stagger = true;
+        if (!stagger) {
+            animator.SetFloat("BumpSpeed", 1f / staggerTime);
+            animator.SetTrigger("Bump");
+            stagger = true;
+        }
     }
 }
