@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerInput : MonoBehaviour {
 
-    public CharacterController controller;
+    public PlayerCharacterController controller;
     public Camera mainCamera;
 
 	// Use this for initialization
@@ -14,6 +14,9 @@ public class PlayerInput : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        if (controller.Dead) {
+            return;
+        }
         Vector3 pos = GetMouseOnPlane();
         controller.Move(pos.x, pos.z);
         if (Input.GetMouseButtonDown(0)) {

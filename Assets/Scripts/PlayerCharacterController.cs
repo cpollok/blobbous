@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterController : GameRuleInteractor<GameRules> {
+public class PlayerCharacterController : GameRuleInteractor<GameRules> {
 
     [SerializeField] private Animator animator;
     [SerializeField] private Transform mountingPoints;
@@ -18,6 +18,7 @@ public class CharacterController : GameRuleInteractor<GameRules> {
     private float lastTimeSwung = -1;
 
     private bool dead = false;
+    public bool Dead { get { return dead; } }
 
     void Start () {
         gameRules.SetPlayerCharacter(this.gameObject);
@@ -95,9 +96,11 @@ public class CharacterController : GameRuleInteractor<GameRules> {
     }
 
     public void Die() {
+        GetComponent<Collider>().enabled = false;
         dead = true;
         animator.SetTrigger("BiterHit");
         LeaveWeapons();
+        gameRules.PlayerDead();
     }
 
     private void LeaveWeapons() {

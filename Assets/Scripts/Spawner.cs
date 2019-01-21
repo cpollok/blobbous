@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Spawner : MonoBehaviour {
+public class Spawner : GameRuleInteractor<GameRules> {
 
     [SerializeField] private Camera cam;
     [SerializeField] private GameObject arena;
@@ -39,7 +39,15 @@ public class Spawner : MonoBehaviour {
         Vector2 rndPoint = Random.insideUnitCircle;
         Vector3 spawnDirection = new Vector3(rndPoint.x, 0, rndPoint.y);
         Vector3 spawn = arenaCenter + spawnDirection.normalized * cam.orthographicSize * 2.5f;
-        GameObject blob = Instantiate(greenPrefab, spawn, new Quaternion());
+        float i = Random.value;
+        GameObject prefab;
+        if (i > 0.9) {
+            prefab = gameRules.BlobPrefabs[1];
+        }
+        else {
+            prefab = gameRules.BlobPrefabs[0];
+        }
+        GameObject blob = Instantiate(prefab, spawn, new Quaternion());
 
         rndPoint = Random.insideUnitCircle;
         blob.transform.LookAt(new Vector3(rndPoint.x,0,rndPoint.y)*cam.orthographicSize);

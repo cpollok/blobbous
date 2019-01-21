@@ -64,7 +64,7 @@ public class BlueBlobBehaviour : BlobBehaviour {
     }
 
     private bool InPounceRange() {
-        if (DistanceToTarget() < pounceRange) {
+        if (DistanceToTarget() < pounceRange * pounceRangeMult) {
             return true;
         }
         return false;
@@ -98,7 +98,7 @@ public class BlueBlobBehaviour : BlobBehaviour {
                 if (info.Faction == Faction.Player) {
                     GetComponent<Collider>().enabled = false;
                     state = State.Eating;
-                    CharacterController character = collision.gameObject.GetComponent<CharacterController>();
+                    PlayerCharacterController character = collision.gameObject.GetComponent<PlayerCharacterController>();
                     character.Mount(this.gameObject);
                     character.Die();
                     this.transform.localPosition = Vector3.zero;

@@ -485,7 +485,7 @@ MonoBehaviour:
   turnSpeed: 2
   facingAngle: 15
   target: {fileID: 0}
-  pounceRange: 20
+  pounceRange: 15
   pounceRangeMult: 0.75
   state: 0
 --- !u!135 &135389506100848530
