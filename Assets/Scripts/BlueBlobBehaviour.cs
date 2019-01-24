@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BlueBlobBehaviour : BlobBehaviour {
 
-    private enum State {
+    public enum State {
         Default,
         PounceReady,
         Pouncing,
@@ -14,7 +14,8 @@ public class BlueBlobBehaviour : BlobBehaviour {
     [SerializeField] private float pounceRange = 20f;
     [SerializeField] private float pounceRangeMult = 0.75f;
 
-    [SerializeField] private State state = State.Default;
+    [SerializeField] private State currentState = State.Default;
+    public State CurrentState { get { return currentState; } }
 
     private Vector3 pounceStartPos;
 
@@ -22,7 +23,7 @@ public class BlueBlobBehaviour : BlobBehaviour {
         SetSpeed();
         base.Update();
 
-        switch (state) {
+        switch (currentState) {
             case State.Default:
                 if (InPounceRange() && FacingTarget()) {
                     StartPounce();
@@ -39,7 +40,7 @@ public class BlueBlobBehaviour : BlobBehaviour {
     }
 
     private void SetSpeed() {
-        switch (state) {
+        switch (currentState) {
             case State.Default:
                 speed = InitialSpeed;
                 turnSpeed = InitialTurnSpeed;
@@ -71,50 +72,87 @@ public class BlueBlobBehaviour : BlobBehaviour {
     }
 
     private void StartPounce() {
-        state = State.PounceReady;
+        currentState = State.PounceReady;
         pounceStartPos = transform.position;
         animator.SetTrigger("PounceReady");
     }
 
     private void Pounce() {
-        state = State.Pouncing;
+        currentState = State.Pouncing;
         animator.SetTrigger("PounceJump");
     }
 
     private void EndPounce() {
-        state = State.Default;
+        currentState = State.Default;
         animator.SetTrigger("PounceEnd");
     }
-    protected override void OnCollisionEnter(Collision collision) {
-        switch (state) {
-            case State.PounceReady:
-                break;
-            case State.Pouncing:
-                CharacterInfo info = collision.gameObject.GetComponent<CharacterInfo>();
-                if (!info) {
-                    Debug.Log("Collided with something unusual...");
-                    break;
-                }
-                if (info.Faction == Faction.Player) {
-                    GetComponent<Collider>().enabled = false;
-                    state = State.Eating;
-                    PlayerCharacterController character = collision.gameObject.GetComponent<PlayerCharacterController>();
-                    character.Mount(this.gameObject);
-                    character.Die();
-                    this.transform.localPosition = Vector3.zero;
-                    this.TurnInstant(collision.transform.position - transform.position);
-                    animator.SetTrigger("PounceHit");
-                }
-                else {
-                    // Slow down?
-                    // Handle pouncing collision with special blobs.
-                }
-                break;
-            case State.Eating:
-                break;
-            default:
-                base.OnCollisionEnter(collision);
-                break;
-        }
+    //protected override void OnCollisionEnter(Collision collision) {
+    //    switch (state) {
+    //        case State.PounceReady:
+    //            break;
+    //        case State.Pouncing:
+    //            CharacterInfo info = collision.gameObject.GetComponent<CharacterInfo>();
+    //            if (!info) {
+    //                Debug.Log("Collided with something unusual...");
+    //                break;
+    //            }
+    //            if (info.Faction == Faction.Player) {
+    //                GetComponent<Collider>().enabled = false;
+    //                state = State.Eating;
+    //                PlayerCharacterController character = collision.gameObject.GetComponent<PlayerCharacterController>();
+    //                character.Mount(this.gameObject);
+    //                character.Die();
+    //                this.transform.localPosition = Vector3.zero;
+    //                this.TurnInstant(collision.transform.position - transform.position);
+    //                animator.SetTrigger("PounceHit");
+    //            }
+    //            else {
+    //                // Slow down?
+    //                // Handle pouncing collision with special blobs.
+    //            }
+    //            break;
+    //        case State.Eating:
+    //            break;
+    //        default:
+    //            base.OnCollisionEnter(collision);
+    //            break;
+    //    }
+    //}
+
+    public void StartEating() {
+        GetComponent<Collider>().enabled = false;
+        currentState = State.Eating;
+        animator.SetTrigger("PounceHit");
     }
+
+    //protected override void OnTriggerEnter(Collider other) {
+    //    switch (currentState) {
+    //        case State.Default:
+    //            base.OnTriggerEnter(other);
+    //            break;
+    //        case State.Pouncing:
+    //            CharacterInfo info = other.GetComponent<CharacterInfo>();
+    //            if (!info) {
+    //                Debug.Log("Collided with something unusual...");
+    //                break;
+    //            }
+    //            if (info.Faction == Faction.Player) {
+    //                GetComponent<Collider>().enabled = false;
+    //                currentState = State.Eating;
+    //                PlayerCharacterController character = other.GetComponent<PlayerCharacterController>();
+    //                character.Mount(this.gameObject);
+    //                character.Die();
+    //                this.transform.localPosition = Vector3.zero;
+    //                this.TurnInstant(other.transform.position - transform.position);
+    //                animator.SetTrigger("PounceHit");
+    //            }
+    //            else {
+    //                // Slow down?
+    //                // Handle pouncing collision with special blobs.
+    //            }
+    //            break;
+    //        default:
+    //            break;
+    //    }
+    //}
 }

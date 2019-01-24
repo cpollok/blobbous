@@ -77,17 +77,16 @@ public class PlayerCharacterController : GameRuleInteractor<GameRules> {
     }
 
     public void Mount(GameObject mountee) {
-        Debug.Log("Mounting!");
         EnemyInfo enemyInfo = mountee.GetComponent<EnemyInfo>();
         if (enemyInfo) {
-            Debug.Log("Mounting enemy!");
             switch (enemyInfo.Type) {
                 case EnemyType.Green:
                     break;
                 case EnemyType.Blue:
-                    Debug.Log("Mounting blue blob!");
                     Transform biterMount = mountingPoints.Find("Biter");
                     mountee.transform.parent = biterMount;
+                    mountee.transform.localPosition = Vector3.zero;
+                    mountee.transform.localRotation = Quaternion.identity;
                     break;
                 default:
                     break;
@@ -112,11 +111,35 @@ public class PlayerCharacterController : GameRuleInteractor<GameRules> {
         }
     }
 
-    private void OnCollisionEnter(Collision collision) {
+    //private void OnCollisionEnter(Collision collision) {
+    //    EnemyInfo enemyInfo = collision.collider.GetComponent<EnemyInfo>();
+    //    if (enemyInfo) {
+    //        if (!stagger) {
+    //            animator.SetFloat("BumpSpeed", 1f / staggerTime);
+    //            animator.SetTrigger("Bump");
+    //            stagger = true;
+    //        }
+    //    }
+    //}
+
+    public void Stagger() {
         if (!stagger) {
             animator.SetFloat("BumpSpeed", 1f / staggerTime);
             animator.SetTrigger("Bump");
             stagger = true;
         }
+    }
+
+    private void OnTriggerEnter(Collider other) {
+        Debug.Log("Char coliision.");
+        gameRules.HandleCollision(this.gameObject, other);
+        //EnemyInfo enemyInfo = other.GetComponent<EnemyInfo>();
+        //if (enemyInfo) {
+        //    if (!stagger) {
+        //        animator.SetFloat("BumpSpeed", 1f / staggerTime);
+        //        animator.SetTrigger("Bump");
+        //        stagger = true;
+        //    }
+        //}
     }
 }

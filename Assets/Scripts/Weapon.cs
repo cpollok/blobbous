@@ -5,6 +5,7 @@ using UnityEngine;
 public class Weapon : MonoBehaviour {
 
     [SerializeField] private Animator animator;
+    [SerializeField] private Collider collider;
     public AnimationClip swingAnimation;
 
     private bool damage = false;
@@ -24,17 +25,19 @@ public class Weapon : MonoBehaviour {
 
     public void Swing() {
         animator.SetTrigger("Swing");
-        damage = true;
+        //damage = true;
+        collider.enabled = true;
     }
 
     public void StopDamage() {
-        damage = false;
+        //damage = false;
+        collider.enabled = false;
     }
 
-    private void OnTriggerEnter(Collider other) {
-        EnemyInfo enemy = other.GetComponent<EnemyInfo>();
-        if (enemy && damage) {
-            enemy.GetHit();
-        }
-    }
+    //private void OnTriggerEnter(Collider other) {
+    //    EnemyInfo enemy = other.GetComponent<EnemyInfo>();
+    //    if (enemy && damage) {
+    //        enemy.GetHit();
+    //    }
+    //}
 }

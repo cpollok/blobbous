@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class GameRules : MonoBehaviour {
 
     [SerializeField] private Canvas ui;
+    [SerializeField] private CollisionRules collisionRules;
 
     private GameObject playerCharacter;
     public GameObject PlayerCharacter { get { return playerCharacter;}}
@@ -28,5 +29,9 @@ public class GameRules : MonoBehaviour {
 
     public void Reload() {
         SceneManager.LoadScene(0);
+    }
+
+    public void HandleCollision(GameObject o, Collider other) {
+        collisionRules.HandleCollision(o, other);
     }
 }
