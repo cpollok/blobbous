@@ -25,19 +25,10 @@ public class Weapon : MonoBehaviour {
 
     public void Swing() {
         animator.SetTrigger("Swing");
-        //damage = true;
         collider.enabled = true;
     }
 
     public void StopDamage() {
-        //damage = false;
         collider.enabled = false;
     }
-
-    //private void OnTriggerEnter(Collider other) {
-    //    EnemyInfo enemy = other.GetComponent<EnemyInfo>();
-    //    if (enemy && damage) {
-    //        enemy.GetHit();
-    //    }
-    //}
 }

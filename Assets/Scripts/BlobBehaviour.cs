@@ -94,16 +94,7 @@ public class BlobBehaviour : GameRuleInteractor<GameRules> {
         return false;
     }
 
-    //protected virtual void OnCollisionEnter(Collision collision) {
-    //    Vector3 otherPos = collision.collider.transform.position;
-    //    Vector3 direction = this.transform.position - otherPos;
-    //    TurnInstant(direction);
-    //}
-
     protected virtual void OnTriggerEnter(Collider other) {
         gameRules.HandleCollision(this.gameObject, other);
-        //Vector3 otherPos = other.transform.position;
-        //Vector3 direction = this.transform.position - otherPos;
-        //TurnInstant(direction);
     }
 }

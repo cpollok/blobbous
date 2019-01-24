@@ -86,73 +86,10 @@ public class BlueBlobBehaviour : BlobBehaviour {
         currentState = State.Default;
         animator.SetTrigger("PounceEnd");
     }
-    //protected override void OnCollisionEnter(Collision collision) {
-    //    switch (state) {
-    //        case State.PounceReady:
-    //            break;
-    //        case State.Pouncing:
-    //            CharacterInfo info = collision.gameObject.GetComponent<CharacterInfo>();
-    //            if (!info) {
-    //                Debug.Log("Collided with something unusual...");
-    //                break;
-    //            }
-    //            if (info.Faction == Faction.Player) {
-    //                GetComponent<Collider>().enabled = false;
-    //                state = State.Eating;
-    //                PlayerCharacterController character = collision.gameObject.GetComponent<PlayerCharacterController>();
-    //                character.Mount(this.gameObject);
-    //                character.Die();
-    //                this.transform.localPosition = Vector3.zero;
-    //                this.TurnInstant(collision.transform.position - transform.position);
-    //                animator.SetTrigger("PounceHit");
-    //            }
-    //            else {
-    //                // Slow down?
-    //                // Handle pouncing collision with special blobs.
-    //            }
-    //            break;
-    //        case State.Eating:
-    //            break;
-    //        default:
-    //            base.OnCollisionEnter(collision);
-    //            break;
-    //    }
-    //}
 
     public void StartEating() {
         GetComponent<Collider>().enabled = false;
         currentState = State.Eating;
         animator.SetTrigger("PounceHit");
     }
-
-    //protected override void OnTriggerEnter(Collider other) {
-    //    switch (currentState) {
-    //        case State.Default:
-    //            base.OnTriggerEnter(other);
-    //            break;
-    //        case State.Pouncing:
-    //            CharacterInfo info = other.GetComponent<CharacterInfo>();
-    //            if (!info) {
-    //                Debug.Log("Collided with something unusual...");
-    //                break;
-    //            }
-    //            if (info.Faction == Faction.Player) {
-    //                GetComponent<Collider>().enabled = false;
-    //                currentState = State.Eating;
-    //                PlayerCharacterController character = other.GetComponent<PlayerCharacterController>();
-    //                character.Mount(this.gameObject);
-    //                character.Die();
-    //                this.transform.localPosition = Vector3.zero;
-    //                this.TurnInstant(other.transform.position - transform.position);
-    //                animator.SetTrigger("PounceHit");
-    //            }
-    //            else {
-    //                // Slow down?
-    //                // Handle pouncing collision with special blobs.
-    //            }
-    //            break;
-    //        default:
-    //            break;
-    //    }
-    //}
 }

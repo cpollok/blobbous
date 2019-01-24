@@ -111,17 +111,6 @@ public class PlayerCharacterController : GameRuleInteractor<GameRules> {
         }
     }
 
-    //private void OnCollisionEnter(Collision collision) {
-    //    EnemyInfo enemyInfo = collision.collider.GetComponent<EnemyInfo>();
-    //    if (enemyInfo) {
-    //        if (!stagger) {
-    //            animator.SetFloat("BumpSpeed", 1f / staggerTime);
-    //            animator.SetTrigger("Bump");
-    //            stagger = true;
-    //        }
-    //    }
-    //}
-
     public void Stagger() {
         if (!stagger) {
             animator.SetFloat("BumpSpeed", 1f / staggerTime);
@@ -131,15 +120,6 @@ public class PlayerCharacterController : GameRuleInteractor<GameRules> {
     }
 
     private void OnTriggerEnter(Collider other) {
-        Debug.Log("Char coliision.");
         gameRules.HandleCollision(this.gameObject, other);
-        //EnemyInfo enemyInfo = other.GetComponent<EnemyInfo>();
-        //if (enemyInfo) {
-        //    if (!stagger) {
-        //        animator.SetFloat("BumpSpeed", 1f / staggerTime);
-        //        animator.SetTrigger("Bump");
-        //        stagger = true;
-        //    }
-        //}
     }
 }
