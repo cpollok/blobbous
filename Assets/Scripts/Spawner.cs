@@ -33,10 +33,15 @@ public class Spawner : GameRuleInteractor<GameRules> {
         float spawnReduction = Mathf.Floor((Time.time - roundStartTime) / decreaseTime) * decreaseAmount;
         float spawnTime = Mathf.Max(spawnTimeMin, initalSpawnTime - spawnReduction);
         if (Time.time - lastSpawnTime > spawnTime) {
-            SpawnBlob();
-            SpawnBlob();
+            SpawnBlobs(2);
         }
 	}
+
+    void SpawnBlobs(int count) {
+        for (int i = 0; i < count; i++) {
+            SpawnBlob();
+        }
+    }
 
     void SpawnBlob() {
         Vector2 rndPoint = Random.insideUnitCircle;
@@ -44,7 +49,7 @@ public class Spawner : GameRuleInteractor<GameRules> {
         Vector3 spawn = arenaCenter + spawnDirection.normalized * cam.orthographicSize * 2.5f;
         float i = Random.value;
         GameObject prefab;
-        if (i > 0.9) {
+        if (i > 0.88) {
             prefab = gameRules.BlobPrefabs[1];
         }
         else {
