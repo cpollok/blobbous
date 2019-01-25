@@ -9,8 +9,9 @@ public enum EnemyType {
 }
 
 public class EnemyInfo : CharacterInfo {
-    [SerializeField]
-    private EnemyType type;
+    [SerializeField] private EnemyType type;
+    [SerializeField] private int pointValue;
+    public int PointValue { get { return pointValue; } }
 
     public EnemyType Type {
         get {
@@ -18,7 +19,7 @@ public class EnemyInfo : CharacterInfo {
         }
     }
 
-    public void GetHit() {
-        Destroy(this.gameObject);
-    }
+    //public void GetHit() {
+    //    Destroy(this.gameObject);
+    //}
 }

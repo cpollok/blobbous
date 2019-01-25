@@ -13,6 +13,8 @@ public class Spawner : GameRuleInteractor<GameRules> {
     [SerializeField] private float decreaseAmount = 1;
     [SerializeField] private float spawnTimeMin = 1;
 
+    private float roundStartTime;
+
     private float currentSpawnTime;
 
     private float lastSpawnTime = 0;
@@ -21,13 +23,14 @@ public class Spawner : GameRuleInteractor<GameRules> {
 
 	// Use this for initialization
 	void Start () {
+        roundStartTime = Time.time;
         arenaCenter = arena.transform.position;
         SpawnBlob();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        float spawnReduction = Mathf.Floor(Time.time / decreaseTime) * decreaseAmount;
+        float spawnReduction = Mathf.Floor((Time.time - roundStartTime) / decreaseTime) * decreaseAmount;
         float spawnTime = Mathf.Max(spawnTimeMin, initalSpawnTime - spawnReduction);
         if (Time.time - lastSpawnTime > spawnTime) {
             SpawnBlob();

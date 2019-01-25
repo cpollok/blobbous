@@ -10,6 +10,7 @@ public enum MovementBehaviour {
 
 public class BlobBehaviour : GameRuleInteractor<GameRules> {
 
+    [SerializeField] private EnemyInfo info;
     [SerializeField] protected Animator animator;
 
     [SerializeField] private MovementBehaviour movementBehaviour = MovementBehaviour.Ignore;
@@ -71,6 +72,15 @@ public class BlobBehaviour : GameRuleInteractor<GameRules> {
 
     }
 
+    public void GetHit() {
+        Die();
+    }
+
+    private void Die() {
+        gameRules.AwardPoints(info.PointValue);
+        Destroy(gameObject);
+    }
+
     private void TurnTowardsTarget() {
         Vector3 targetV = target.position - transform.position;
         float yAngle = Vector3.SignedAngle(transform.forward, targetV.normalized, Vector3.up) * Time.deltaTime * turnSpeed;
@@ -93,6 +103,7 @@ public class BlobBehaviour : GameRuleInteractor<GameRules> {
         }
         return false;
     }
+
 
     protected virtual void OnTriggerEnter(Collider other) {
         gameRules.HandleCollision(this.gameObject, other);

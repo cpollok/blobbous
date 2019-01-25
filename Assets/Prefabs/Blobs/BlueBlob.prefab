@@ -457,6 +457,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   faction: 1
   type: 1
+  pointValue: 20
 --- !u!114 &114222555036959336
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -479,6 +480,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 679b32e4603f347428932236d0a1c442, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  info: {fileID: 114084854663132122}
   animator: {fileID: 95349787265918820}
   movementBehaviour: 1
   speed: 5
@@ -487,7 +489,7 @@ MonoBehaviour:
   target: {fileID: 0}
   pounceRange: 15
   pounceRangeMult: 0.75
-  state: 0
+  currentState: 0
 --- !u!135 &135389506100848530
 SphereCollider:
   m_ObjectHideFlags: 1

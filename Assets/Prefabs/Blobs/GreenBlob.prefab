@@ -163,6 +163,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d99b4312fec2d1a4c8312f44d9b153c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  info: {fileID: 114434264196219358}
   animator: {fileID: 95087040375366486}
   movementBehaviour: 0
   speed: 5
@@ -182,6 +183,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   faction: 1
   type: 0
+  pointValue: 10
 --- !u!114 &114602820471461962
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -56,7 +56,7 @@ public class CollisionRules : MonoBehaviour {
 
         // If it hits a weapon. It has to get hit.
         if (other.GetComponent<Weapon>()) {
-            info.GetHit();
+            blob.GetHit();
         }
 
         // Did we collide with another Blob?
@@ -72,7 +72,7 @@ public class CollisionRules : MonoBehaviour {
                 case EnemyType.Blue:
                     switch (((BlueBlobBehaviour)otherBlob).CurrentState) {
                         case BlueBlobBehaviour.State.Pouncing:
-                            info.GetHit();
+                            blob.GetHit();
                             break;
                         default:
                             break;
