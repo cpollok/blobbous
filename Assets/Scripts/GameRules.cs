@@ -15,6 +15,9 @@ public class GameRules : MonoBehaviour {
     private int currentPoints;
     private bool pointsLocked = false;
 
+    private float roundStartTime;
+    public float RoundStartTime { get { return roundStartTime; } }
+
     private List<int> combo;
     private int ComboValue {
         get {
@@ -44,14 +47,18 @@ public class GameRules : MonoBehaviour {
         pointsValue = ui.transform.Find("PointsValue").GetComponent<Text>();
         comboValueText = ui.transform.Find("ComboValue").GetComponent<Text>();
         timeText = ui.transform.Find("Time").GetComponent<Text>();
+        timeText.text = "0.00";
 
+        roundStartTime = Time.time;
         currentPoints = 0;
         combo = new List<int>();
         pointsLocked = false;
     }
 
     protected void Update() {
-        timeText.text = Time.time.ToString("F2");
+        if (!pointsLocked) {
+            timeText.text = (Time.time - roundStartTime).ToString("F2");
+        }
         CheckCombo();
     }
 

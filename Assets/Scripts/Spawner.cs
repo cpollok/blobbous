@@ -26,12 +26,12 @@ public class Spawner : GameRuleInteractor<GameRules> {
     private int currentWaveConfigIdx = 0;
     private float currentWaveConfigStart = 0;
 
-    private float roundStartTime;
+    //private float roundStartTime;
 
     private Vector3 arenaCenter;
     
 	void Start () {
-        roundStartTime = Time.time;
+        //roundStartTime = Time.time;
         arenaCenter = arena.transform.position;
         SpawnBlob();
 	}
@@ -41,7 +41,7 @@ public class Spawner : GameRuleInteractor<GameRules> {
 	}
 
     void Spawn() {
-        float spawnReduction = Mathf.Floor((Time.time - roundStartTime) / spawnTimeDecreaseInterval) * spawnTimeDecreaseAmount;
+        float spawnReduction = Mathf.Floor((Time.time - gameRules.RoundStartTime) / spawnTimeDecreaseInterval) * spawnTimeDecreaseAmount;
         float spawnTime = Mathf.Max(spawnTimeMin, initalSpawnTime - spawnReduction);
         if (Time.time - lastSpawnTime > spawnTime) {
             SpawnBlobs(2);
