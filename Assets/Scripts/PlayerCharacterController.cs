@@ -10,6 +10,8 @@ public class PlayerCharacterController : GameRuleInteractor<GameRules> {
     [SerializeField] private GameObject weapon;
     private Weapon weaponController;
 
+    [SerializeField] private float speed = 10;
+
     [SerializeField] private float staggerTime = 1.5f;
     private float staggerStart = -1;
     private bool stagger = false;
@@ -61,7 +63,10 @@ public class PlayerCharacterController : GameRuleInteractor<GameRules> {
         }
         Turn(x, z);
         // Move towards goal position.
-        this.transform.position = Vector3.Lerp(this.transform.position, new Vector3(x, 0, z), Time.deltaTime);
+        Vector3 direction = new Vector3(x, 0, z) - this.transform.position;
+        if (direction.magnitude > 0.2) {
+            this.transform.position = this.transform.position + direction.normalized * Time.deltaTime * speed;
+        }
     }
 
     private void Turn(float x, float z) {
