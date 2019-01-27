@@ -5,7 +5,7 @@ using UnityEngine;
 public class Weapon : MonoBehaviour {
 
     [SerializeField] private Animator animator;
-    [SerializeField] private Collider collider;
+    [SerializeField] private Collider bladeCollider;
     public AnimationClip swingAnimation;
 
     private bool damage = false;
@@ -25,10 +25,10 @@ public class Weapon : MonoBehaviour {
 
     public void Swing() {
         animator.SetTrigger("Swing");
-        collider.enabled = true;
+        bladeCollider.enabled = true;
     }
 
     public void StopDamage() {
-        collider.enabled = false;
+        bladeCollider.enabled = false;
     }
 }

@@ -11,6 +11,7 @@ public class GameRules : MonoBehaviour {
 
     private Text pointsValue;
     private Text comboValueText;
+    private Text timeText;
     private int currentPoints;
     private bool pointsLocked = false;
 
@@ -42,6 +43,7 @@ public class GameRules : MonoBehaviour {
     protected void Start() {
         pointsValue = ui.transform.Find("PointsValue").GetComponent<Text>();
         comboValueText = ui.transform.Find("ComboValue").GetComponent<Text>();
+        timeText = ui.transform.Find("Time").GetComponent<Text>();
 
         currentPoints = 0;
         combo = new List<int>();
@@ -49,6 +51,7 @@ public class GameRules : MonoBehaviour {
     }
 
     protected void Update() {
+        timeText.text = Time.time.ToString("F2");
         CheckCombo();
     }
 
