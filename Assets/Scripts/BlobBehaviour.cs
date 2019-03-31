@@ -76,6 +76,11 @@ public class BlobBehaviour : GameRuleInteractor<GameRules> {
         Die();
     }
 
+    public void GetHitByGas(GasType type) {
+        Debug.Log("Damn Nazis! blubber");
+        Die();
+    }
+
     private void Die() {
         gameRules.AwardPoints(info.PointValue);
         Destroy(gameObject);
@@ -104,8 +109,7 @@ public class BlobBehaviour : GameRuleInteractor<GameRules> {
         return false;
     }
 
-
-    protected virtual void OnTriggerEnter(Collider other) {
-        gameRules.HandleCollision(this.gameObject, other);
+    protected virtual void OnCollisionEnter(Collision collision) {
+        gameRules.HandleCollision(this.gameObject, collision.collider);
     }
 }

@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class CollisionRules : MonoBehaviour {
     
-    private struct CollisionInfo {
-        GameObject a;
-        GameObject b;
+    //private struct CollisionInfo {
+    //    GameObject a;
+    //    GameObject b;
 
-        public bool Equals(CollisionInfo other) {
-            return a == other.a && b == other.b || a == other.b && b == other.a;
-        }
-    }
+    //    public bool Equals(CollisionInfo other) {
+    //        return a == other.a && b == other.b || a == other.b && b == other.a;
+    //    }
+    //}
 
-    private List<CollisionInfo> handledCollisions;
+    //private List<CollisionInfo> handledCollisions;
 
 
     public void HandleCollision(GameObject o, Collider other) {
@@ -21,6 +21,11 @@ public class CollisionRules : MonoBehaviour {
         if (characterInfo) {
             HandleCollision(characterInfo, other);
             return;
+        }
+
+        GasCloud gasCloud = o.GetComponent<GasCloud>();
+        if (gasCloud){
+            HandleCollision(gasCloud, other);
         }
     }
 
@@ -115,9 +120,28 @@ public class CollisionRules : MonoBehaviour {
         }
     }
 
+    private void HandleCollision(GasCloud gasCloud, Collider other) {
+        GasType gasType = gasCloud.GasType;
+        CharacterInfo otherInfo = other.GetComponent<CharacterInfo>();
+        if (otherInfo) {
+            PlayerCharacterController player = other.GetComponent<PlayerCharacterController>();
+            if (player) {
+                player.GetHitByGas(gasType);
+            }
+            BlobBehaviour blob = other.GetComponent<BlobBehaviour>();
+            if (blob) {
+                blob.GetHitByGas(gasType);
+            }
+        }
+    }
+
     private void BounceAway(BlobBehaviour blob, Collider other) {
+        if (other.CompareTag("NoBounce")) {
+            return;
+        }
         Vector3 otherPos = other.gameObject.transform.position;
         Vector3 direction = blob.transform.position - otherPos;
         blob.TurnInstant(direction);
     }
+
 }

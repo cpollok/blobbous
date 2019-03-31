@@ -99,6 +99,11 @@ public class PlayerCharacterController : GameRuleInteractor<GameRules> {
         }
     }
 
+    public void GetHitByGas(GasType type) {
+        Debug.Log("Damn Nazis!");
+        Die();
+    }
+
     public void Die() {
         GetComponent<Collider>().enabled = false;
         dead = true;
@@ -123,8 +128,7 @@ public class PlayerCharacterController : GameRuleInteractor<GameRules> {
             stagger = true;
         }
     }
-
-    private void OnTriggerEnter(Collider other) {
-        gameRules.HandleCollision(this.gameObject, other);
+    protected virtual void OnCollisionEnter(Collision collision) {
+        gameRules.HandleCollision(this.gameObject, collision.collider);
     }
 }
