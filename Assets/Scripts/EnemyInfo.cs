@@ -5,7 +5,10 @@ using UnityEngine;
 
 public enum EnemyType {
     Green,
-    Blue
+    Blue,
+    Orange,
+    Black,
+    Yellow
 }
 
 public class EnemyInfo : CharacterInfo {

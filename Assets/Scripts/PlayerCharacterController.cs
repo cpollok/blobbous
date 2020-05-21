@@ -11,6 +11,7 @@ public class PlayerCharacterController : GameRuleInteractor<GameRules> {
     private Weapon weaponController;
 
     [SerializeField] private float speed = 10;
+    [SerializeField] private float currentSpeed;
 
     [SerializeField] private float staggerTime = 1.5f;
     private float staggerStart = -1;
@@ -22,14 +23,30 @@ public class PlayerCharacterController : GameRuleInteractor<GameRules> {
     private bool dead = false;
     public bool Dead { get { return dead; } }
 
+    private bool sticky = false;
+    private float stickyStart = -1;
+    public float stickyFactor = 0.5f;
+    public float stickyDuration = 3;
+    public float stickyWearOffDuration = 2;
+
+    [SerializeField]
+    private FlashImage blindfold;
+    private float blindDuration;
+    private float blindStart = -1;
+    private bool blinded = false;
+
+    public bool NoControl { get { return gameRules.Paused; } }
+
     void Start () {
         gameRules.SetPlayerCharacter(this.gameObject);
         weaponController = weapon.GetComponent<Weapon>();
+        currentSpeed = speed;
 	}
 	
 	void Update () {
         CheckStagger();
         CheckSwung();
+        CheckSticky();
     }
 
     void CheckStagger() {
@@ -54,7 +71,34 @@ public class PlayerCharacterController : GameRuleInteractor<GameRules> {
                 lastTimeSwung = -1;
             }
         }
-        
+    }
+
+    void CheckSticky() {
+        if (sticky) {
+            float stickyTime = Time.time - stickyStart;
+            if (stickyTime < stickyDuration) {
+                currentSpeed = speed * stickyFactor;
+            }
+            else {
+                currentSpeed = Mathf.Lerp(stickyFactor * speed, speed, (stickyTime - stickyDuration) / stickyWearOffDuration);
+                if (currentSpeed >= speed) {
+                    currentSpeed = speed;
+                    sticky = false;
+                    stickyStart = -1;
+                    GameObject glueEffect = transform.Find("GlueEffect").gameObject;
+                    glueEffect.SetActive(false);
+                }
+            }
+        }
+    }
+
+    void CheckBlind() {
+        if (blinded) {
+            if (Time.time >= blindStart + blindDuration) {
+                blinded = false;
+                blindfold.gameObject.SetActive(false);
+            }
+        }
     }
 
     public void Move(float x, float z) {
@@ -65,7 +109,7 @@ public class PlayerCharacterController : GameRuleInteractor<GameRules> {
         // Move towards goal position.
         Vector3 direction = new Vector3(x, 0, z) - this.transform.position;
         if (direction.magnitude > 0.2) {
-            this.transform.position = this.transform.position + direction.normalized * Time.deltaTime * speed;
+            this.transform.position = this.transform.position + direction.normalized * Time.deltaTime * currentSpeed;
         }
     }
 
@@ -100,8 +144,20 @@ public class PlayerCharacterController : GameRuleInteractor<GameRules> {
     }
 
     public void GetHitByGas(GasType type) {
-        Debug.Log("Damn Nazis!");
-        Die();
+        switch (type) {
+            case GasType.Acid:
+                Debug.Log("Damn Nazis!");
+                Die();
+                break;
+            case GasType.Glue:
+                GetSticky();
+                break;
+            case GasType.Ink:
+                GetInked();
+                break;
+            default:
+                break;
+        }
     }
 
     public void Die() {
@@ -110,6 +166,26 @@ public class PlayerCharacterController : GameRuleInteractor<GameRules> {
         animator.SetTrigger("BiterHit");
         LeaveWeapons();
         gameRules.PlayerDead();
+    }
+
+    public void GetSticky() {
+        if (!sticky) {
+            Debug.Log("Ewww! Sticky!");
+            sticky = true;
+            stickyStart = Time.time;
+            GameObject glueEffect = transform.Find("GlueEffect").gameObject;
+            glueEffect.SetActive(true);
+        }
+    }
+
+    public void GetInked() {
+        if (!blinded) {
+            Debug.Log("Ahhhh! Who put the lights out?");
+            blinded = true;
+            blindStart = Time.time;
+            blindfold.gameObject.SetActive(true);
+            blindfold.BlinkBlack();
+        }
     }
 
     private void LeaveWeapons() {

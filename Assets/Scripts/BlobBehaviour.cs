@@ -12,11 +12,13 @@ public class BlobBehaviour : GameRuleInteractor<GameRules> {
 
     [SerializeField] private EnemyInfo info;
     [SerializeField] protected Animator animator;
+    [SerializeField] private GameObject gasPrefab;
 
     [SerializeField] private MovementBehaviour movementBehaviour = MovementBehaviour.Ignore;
     [SerializeField] protected float speed = 5;
     [SerializeField] protected float turnSpeed = 1;
     [SerializeField] private float facingAngle = 15f;
+    [SerializeField] private Color gasColor;
 
     [SerializeField] protected Transform target;
 
@@ -77,12 +79,25 @@ public class BlobBehaviour : GameRuleInteractor<GameRules> {
     }
 
     public void GetHitByGas(GasType type) {
-        Debug.Log("Damn Nazis! blubber");
-        Die();
+        switch (type) {
+            case GasType.Harmless:
+                break;
+            case GasType.Acid:
+                Die();
+                break;
+            case GasType.Glue:
+                break;
+            case GasType.Ink:
+                break;
+            default:
+                break;
+        }
     }
 
     private void Die() {
         gameRules.AwardPoints(info.PointValue);
+        GameObject gasCloud = Instantiate(gasPrefab, this.transform.position, this.transform.rotation);
+        gasCloud.GetComponent<GasCloud>().SetColor(gasColor);
         Destroy(gameObject);
     }
 

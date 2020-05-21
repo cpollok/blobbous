@@ -14,7 +14,7 @@ public class PlayerInput : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (controller.Dead) {
+        if (controller.Dead || controller.NoControl) {
             return;
         }
         Vector3 pos = GetMouseOnPlane();

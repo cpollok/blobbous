@@ -14,6 +14,8 @@ public class GameRules : MonoBehaviour {
     private Text timeText;
     private int currentPoints;
     private bool pointsLocked = false;
+    private bool paused = false;
+    public bool Paused { get { return paused; } }
 
     private float roundStartTime;
     public float RoundStartTime { get { return roundStartTime; } }
@@ -53,9 +55,25 @@ public class GameRules : MonoBehaviour {
         currentPoints = 0;
         combo = new List<int>();
         pointsLocked = false;
+        paused = false;
+    }
+
+    private void Awake() {
+        Resume();
     }
 
     protected void Update() {
+        if (Input.GetButtonDown("Pause")) {
+            GameObject gameOver = ui.transform.Find("GameOverScreen").gameObject;
+            if (!gameOver.activeSelf) {
+                if (paused) {
+                    Resume();
+                }
+                else {
+                    Pause();
+                }
+            }
+        }
         if (!pointsLocked) {
             timeText.text = (Time.time - roundStartTime).ToString("F2");
         }
@@ -73,7 +91,23 @@ public class GameRules : MonoBehaviour {
     }
 
     public void Reload() {
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void Pause() {
+        paused = true;
+        pointsLocked = true;
+        Time.timeScale = 0;
+        GameObject pause = ui.transform.Find("PauseScreen").gameObject;
+        pause.SetActive(true);
+    }
+
+    public void Resume() {
+        paused = false;
+        GameObject pause = ui.transform.Find("PauseScreen").gameObject;
+        pause.SetActive(false);
+        Time.timeScale = 1;
+        pointsLocked = false;
     }
 
     public void HandleCollision(GameObject o, Collider other) {

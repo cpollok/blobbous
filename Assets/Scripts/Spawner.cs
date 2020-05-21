@@ -6,7 +6,6 @@ public class Spawner : GameRuleInteractor<GameRules> {
 
     [SerializeField] private Camera cam;
     [SerializeField] private GameObject arena;
-    [SerializeField] private GameObject greenPrefab;
 
     // Spawn timer
     [SerializeField] private float initalSpawnTime = 5;

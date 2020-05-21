@@ -6,6 +6,7 @@ public class Weapon : MonoBehaviour {
 
     [SerializeField] private Animator animator;
     [SerializeField] private Collider bladeCollider;
+    [SerializeField] private AudioSource swingSound;
     public AnimationClip swingAnimation;
 
     private bool damage = false;
@@ -26,6 +27,7 @@ public class Weapon : MonoBehaviour {
     public void Swing() {
         animator.SetTrigger("Swing");
         bladeCollider.enabled = true;
+        swingSound.PlayDelayed(0.05f);
     }
 
     public void StopDamage() {
